@@ -131,11 +131,9 @@ var p_mainCall = function(type, args) {
 	}
 };
 
-var __takeOver = '?__!%40%23%24takeOver';
-
 // ::
 var p_reload = function() {
-	var t_url = window.d_href + __takeOver;
+	var t_url = window.d_href;
 	window.location.href = t_url;
 	//alert(window.location.href);
 	//window.location.reload(false);
@@ -143,9 +141,11 @@ var p_reload = function() {
 
 // :: 윈도우 초기화
 var p_winInit = function() {
+	//return;
 	//p_get_swfObj('main_swf').d_as3_init();
 	//p_get_swfObj('main_swf').d_as2_init();
 
+//	{ 샘플
 	//p_mainCall('Win_Init');
 	//p_mainCall('Win_Set_Title', ['Title_Name']);
 	//p_mainCall('Win_Set_Visible', [true]);
@@ -157,23 +157,29 @@ var p_winInit = function() {
 	//p_mainCall('Win_Resize_FullScreen', [true]);
 	//p_mainCall('Win_Resize', [1024, 768]);
 	//p_mainCall('Win_Open', ['D:\\_Test\\Open.exe']);
-	p_mainCall('Win_Set_Title', ['KDB 중국어']);
-	p_mainCall('Win_Set_MinSize', [1170, 796]);
-	//p_mainCall('Win_Set_Location', [40, 40]);
-	//p_mainCall('Win_Resize_FullScreen', [true]);
+	//p_mainCall('Win_Center_Location');
+//	}
+
+	p_mainCall('Win_Resize_FullScreen', [true]);
 };
 
 // - 도큐먼트 시작
 jQuery(document).ready(function() {
 	var t_url = window.location.href.toString();
-	var t_searchIndex = t_url.lastIndexOf(__takeOver);
-	if (t_searchIndex < 0) {
+	var t_piece = t_url.split('?type=');
+
+	// exe 실행
+	if (t_piece.length > 1) {
 		p_winInit();
+		window.d_href = t_piece[0];
+	}
+
+	// html 실행
+	else {
 		window.d_href = t_url;
 	}
-	else {
-		window.d_href = t_url.substr(0, t_searchIndex);
-	}
+
+	//alert('window.d_href: ' + window.d_href);
 });
 </script>
 <style type="text/css">
@@ -206,7 +212,7 @@ body {
 		<embed
 			type="application/x-shockwave-flash"
 			pluginspage="http://www.macromedia.com/go/getflashplayer"
-			src="eBook/eBook.swf"
+			src="Main.swf"
 			quality="high"
 			bgcolor="#ffffff"
 			width="100%"
