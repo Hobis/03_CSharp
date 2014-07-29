@@ -1,5 +1,4 @@
-﻿using IWshRuntimeLibrary;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -39,92 +38,87 @@ namespace NewEdge_002
     // #
     public static class FIO_Util
     {
-        public static void DirectoryCopy(string sourcePath, string destPath, bool isSubPaths, string shortcutName)
+        public static void DirectoryCopy(string sourcePath, string destPath, bool isSubPaths)
         {
-            _t = new Thread(new ThreadStart(delegate()
+            _sourcePath = sourcePath;
+            _destPath = destPath;
+            _isSubPaths = isSubPaths;
+/*
+            try
             {
-                p_DirectoryCopy_Core(sourcePath, destPath, isSubPaths, shortcutName);
-            }));
-            _t.Start();
+                _th = new Thread(new ThreadStart(p_DirectoryCopy_Core));
+                _th.Start();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+            }
+            //_th.Join();*/
+
+            p_DirectoryCopy_Core();
         }
 
-        private static Thread _t = null;
+        private static string _sourcePath = null;
+        private static string _destPath = null;
+        private static bool _isSubPaths = false;
+        //private static Thread _th = null;
 
-        private static void p_DirectoryCopy_Core(string sourcePath, string destPath, bool isSubPaths, string shortcutName)
+        private static void p_DirectoryCopy_Core()
         {
             // Get the subdirectories for the specified directory.
-            DirectoryInfo t_dir = new DirectoryInfo(sourcePath);
+            DirectoryInfo t_dir = new DirectoryInfo(_sourcePath);
             DirectoryInfo[] t_dirs = t_dir.GetDirectories();
 
             if (!t_dir.Exists)
             {
                 throw new DirectoryNotFoundException(
                     "Source directory does not exist or could not be found: "
-                    + sourcePath);
+                    + _sourcePath);
             }
 
             // If the destination directory doesn't exist, create it. 
-            if (!Directory.Exists(destPath))
+            if (!Directory.Exists(_destPath))
             {
-                Directory.CreateDirectory(destPath);
+                Directory.CreateDirectory(_destPath);
             }
-            
-            //destPath = Path.Combine(destPath, shortcutName);
-            //Debug.Log("destPath: " + destPath);
-            //return;
-            //Directory.CreateDirectory(destPath);
 
             // Get the files in the directory and copy them to the new location.
             FileInfo[] t_files = t_dir.GetFiles();
             foreach (FileInfo t_file in t_files)
             {
-                string t_path = Path.Combine(destPath, t_file.Name);
+                string t_path = Path.Combine(_destPath, t_file.Name);
                 t_file.CopyTo(t_path, false);
             }
-            
+
             // If copying subdirectories, copy them and their contents to new location. 
-            if (isSubPaths)
+            if (_isSubPaths)
             {
                 foreach (DirectoryInfo t_subdir in t_dirs)
                 {
-                    string t_path = Path.Combine(destPath, t_subdir.Name);
-                    DirectoryCopy(t_subdir.FullName, t_path, isSubPaths, null);
+                    string t_path = Path.Combine(_destPath, t_subdir.Name);
+                    DirectoryCopy(t_subdir.FullName, t_path, _isSubPaths);
                 }
             }
-
-            if (shortcutName != null)
-            {
-                string t_name = Path.GetFileName(Application.ExecutablePath);
-                string t_targetPath = Path.Combine(destPath, t_name);
-
-                //Debug.Log("t_targetPath: " + t_targetPath);
-
-                try
-                {
-                    p_CreateShortcut(t_targetPath, shortcutName);
-                }
-                catch (Exception)
-                {
-                }
-
-                _t = null;
-            }
-        }
-
-        private static void p_CreateShortcut(string filePath, string shortchutName)
-        {
-            object t_dto = (object)"Desktop";
-            WshShell t_ws = new WshShell();
-            string t_sca = (string)t_ws.SpecialFolders.Item(ref t_dto) + "\\" + shortchutName + ".lnk";
-            IWshShortcut t_wsc = (IWshShortcut)t_ws.CreateShortcut(t_sca);
-            t_wsc.Description = "New shortcut for a Notepad";
-            //t_wsc.Hotkey = "Ctrl+Shift+N";
-            t_wsc.TargetPath = filePath;
-            t_wsc.WorkingDirectory = Path.GetDirectoryName(filePath);
-            t_wsc.Save();
-        }
+            
+            _sourcePath = null;
+            _destPath = null;
+            _isSubPaths = false;
 
 /*
+            Thread t_et = _th;
+            _th = null;*/
+            
+/*
+            try
+            {
+                p_createShortcutToDesktop("hello222222");
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+            }*/
+        }
+
         private static void p_createShortcutToDesktop(string linkName)
         {
             string t_deskPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
@@ -139,6 +133,6 @@ namespace NewEdge_002
                 writer.WriteLine("IconFile=" + icon);
                 writer.Flush();
             }
-        }*/
+        }
     }
 }

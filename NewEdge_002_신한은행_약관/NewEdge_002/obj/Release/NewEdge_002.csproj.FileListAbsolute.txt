@@ -18,3 +18,6 @@ D:\Git_HobisWorks\_Libs\03_CSharp\NewEdge_002_신한은행_약관\NewEdge_002\ob
 D:\Git_HobisWorks\_Libs\03_CSharp\NewEdge_002_신한은행_약관\NewEdge_002\obj\Release\main1.pdb
 D:\Git_HobisWorks\_Libs\03_CSharp\NewEdge_002_신한은행_약관\NewEdge_002\bin\Release\main1.html
 D:\Git_HobisWorks\_Libs\03_CSharp\NewEdge_002_신한은행_약관\NewEdge_002\obj\Release\NewEdge_002.csprojResolveAssemblyReference.cache
+D:\Git_HobisWorks\_Libs\03_CSharp\NewEdge_002_신한은행_약관\NewEdge_002\obj\Release\Interop.IWshRuntimeLibrary.dll
+D:\Git_HobisWorks\_Libs\03_CSharp\NewEdge_002_신한은행_약관\NewEdge_002\obj\Release\NewEdge_002.csproj.ResolveComReference.cache
+D:\Git_HobisWorks\_Libs\03_CSharp\NewEdge_002_신한은행_약관\NewEdge_002\bin\Release\Interop.IWshRuntimeLibrary.dll

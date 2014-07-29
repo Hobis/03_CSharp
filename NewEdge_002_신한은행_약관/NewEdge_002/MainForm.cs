@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -18,37 +19,226 @@ namespace NewEdge_002
         // :: 한번 초기화
         private void p_InitOnce()
         {
-            this.Text = "";
-            this.ClientSize = new Size(800, 600);
-            this.MinimumSize = this.Size;
-            this.StartPosition = FormStartPosition.CenterScreen;
+            /*
+                        //
+                        string t_title = ConfigurationManager.AppSettings.Get("Title");
+                        //
+                        string t_maximumSize = ConfigurationManager.AppSettings.Get("MaximumSize");
+                        //
+                        string t_minimumSize = ConfigurationManager.AppSettings.Get("MinimumSize");
+                        //
+                        string t_clientSize = ConfigurationManager.AppSettings.Get("ClientSize");
+                        //
+                        string t_size = ConfigurationManager.AppSettings.Get("Size");
+                        //
+                        string t_windowState = ConfigurationManager.AppSettings.Get("WindowState");
+                        //
+                        string t_startPosition = ConfigurationManager.AppSettings.Get("StartPosition");
+                        //
+                        string t_formBorderStyle = ConfigurationManager.AppSettings.Get("FormBorderStyle");
+                        //
+                        string t_location = ConfigurationManager.AppSettings.Get("Location");
+                        */
 
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("Title");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    this.Text = t_v;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("MaximumSize");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    string[] t_vs = t_v.Split(',');
+                    Size t_s = new Size();
+                    t_s.Width = int.Parse(t_vs[0]);
+                    t_s.Height = int.Parse(t_vs[1]);
+                    this.MaximumSize = t_s;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("MinimumSize");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    string[] t_vs = t_v.Split(',');
+                    Size t_s = new Size();
+                    t_s.Width = int.Parse(t_vs[0]);
+                    t_s.Height = int.Parse(t_vs[1]);
+                    this.MinimumSize = t_s;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("Size");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    string[] t_vs = t_v.Split(',');
+                    Size t_s = new Size();
+                    t_s.Width = int.Parse(t_vs[0]);
+                    t_s.Height = int.Parse(t_vs[1]);
+                    this.Size = t_s;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("ClientSize");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    string[] t_vs = t_v.Split(',');
+                    Size t_s = new Size();
+                    t_s.Width = int.Parse(t_vs[0]);
+                    t_s.Height = int.Parse(t_vs[1]);
+                    this.ClientSize = t_s;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("Location");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    string[] t_vs = t_v.Split(',');
+                    Point t_p = new Point();
+                    t_p.X = int.Parse(t_vs[0]);
+                    t_p.Y = int.Parse(t_vs[1]);
+                    this.StartPosition = FormStartPosition.Manual;
+                    this.Location = t_p;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("WindowState");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    FormWindowState t_ev = (FormWindowState)Enum.Parse(typeof(FormWindowState), t_v);
+                    this.WindowState = t_ev;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("FormBorderStyle");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    FormBorderStyle t_ev = (FormBorderStyle)Enum.Parse(typeof(FormBorderStyle), t_v);
+                    this.FormBorderStyle = t_ev;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("StartPosition");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    FormStartPosition t_ev = (FormStartPosition)Enum.Parse(typeof(FormStartPosition), t_v);
+                    this.StartPosition = t_ev;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            //
+            try
+            {
+                string t_v = ConfigurationManager.AppSettings.Get("WindowFullScreen");
+                if (!string.IsNullOrEmpty(t_v))
+                {
+                    bool t_b = bool.Parse(t_v);
+                    this.p_SetFullScreen(t_b);
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+
+            //
             this.webBrowser1.ObjectForScripting = this;
             this.webBrowser1.IsWebBrowserContextMenuEnabled = false;
             this.webBrowser1.AllowWebBrowserDrop = false;
             this.webBrowser1.ScrollBarsEnabled = false;
             this.webBrowser1.ScriptErrorsSuppressed = false;
             this.webBrowser1.WebBrowserShortcutsEnabled = false;
+
+            string t_name = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
+            string t_src = Path.Combine(Environment.CurrentDirectory, t_name + ".html" + _TakeOver);
+            this.webBrowser1.Navigate(t_src);
+        }
+
+        // -
+        private bool _bFirst = true;
+        // ::
+        protected override void SetVisibleCore(bool b)
+        {
+            if (this._bFirst)
+            {
+                base.SetVisibleCore(false);
+                this._bFirst = false;
+            }
+            else
+            {
+                base.SetVisibleCore(b);
+            }
         }
 
         // -
         private const string _TakeOver = "?type=!__%40%23%24takeOver";
-
         // :: 현재 폼 로드완료 (2빠따로 호출됨)
         private void p_This_Load(object sender, EventArgs ea)
         {
-            String t_name = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
-            String t_src = Path.Combine(Environment.CurrentDirectory, t_name + ".html" + _TakeOver);
-            this.webBrowser1.Navigate(t_src);
-            this.Visible = false;
-
-            //MessageBox.Show("p_This_Load");
+            //Debug.Log("p_This_Load");
         }
 
         // :: 웹브라우저 Document 로드완료 (1빠따로 호출됨)
         private void p_webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs ebdcea)
         {
-            //MessageBox.Show("p_webBrowser1_DocumentCompleted");
+            //Debug.Log("p_webBrowser1_DocumentCompleted");
+
+            this.SetVisibleCore(true);
         }
 
         // :: 웹브라우저 키다운 핸들러
@@ -56,19 +246,19 @@ namespace NewEdge_002
         {
             switch (pkdea.KeyCode)
             {
-            case Keys.Escape:
-                {
-                    this.p_SetFullScreen(false);
+                case Keys.Escape:
+                    {
+                        this.p_SetFullScreen(false);
 
-                    break;
-                }
+                        break;
+                    }
 
-            case Keys.F5:
-                {
-                    this.p_Js_Call("p_reload", null);
+                case Keys.F5:
+                    {
+                        this.p_Js_Call("p_reload", null);
 
-                    break;
-                }
+                        break;
+                    }
             }
         }
 
@@ -164,245 +354,147 @@ namespace NewEdge_002
         {
             switch (wmt)
             {
-            case Win_Message_Types.Win_Init:
-                {
-                    //
-                    break;
-                }
-
-            case Win_Message_Types.Win_Set_Title:
-                {
-                    string t_name = (string)args[0];
-                    this.Text = t_name;
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Set_Visible:
-                {
-                    bool t_b = (bool)args[0];
-                    this.Visible = t_b;
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Set_MinSize:
-                {
-                    this.WindowState = FormWindowState.Normal;
-                    Size t_s = this.Size;
-                    t_s.Width = (int)args[0];
-                    t_s.Height = (int)args[1];
-                    this.MinimumSize = this.DefaultMaximumSize;
-                    this.ClientSize = t_s;
-                    this.MinimumSize = this.Size;
-
-                    break;
-                }
-
-
-            case Win_Message_Types.Win_Set_Location:
-                {
-                    this.WindowState = FormWindowState.Normal;
-                    Point t_p = this.Location;
-                    t_p.X = (int)args[0];
-                    t_p.Y = (int)args[1];
-                    this.Location = t_p;
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Resize_Max:
-                {
-                    this.WindowState = FormWindowState.Maximized;
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Resize_Min:
-                {
-                    this.WindowState = FormWindowState.Minimized;
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Resize_Normal:
-                {
-                    this.WindowState = FormWindowState.Normal;
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Resize_FullScreen:
-                {
-                    bool t_b = (bool)args[0];
-                    this.p_SetFullScreen(t_b);
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Resize:
-                {
-                    this.WindowState = FormWindowState.Normal;
-                    Size t_s = this.Size;
-                    t_s.Width = (int)args[0];
-                    t_s.Height = (int)args[1];
-                    this.ClientSize = t_s;
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Open:
-                {
-                    string t_basePath = Environment.CurrentDirectory;
-                    string t_addPath = (string)args[0];
-                    string t_path = Path.Combine(t_basePath, t_addPath);
-                    //MessageBox.Show("t_path: " + t_path);
-                    //Process.Start(t_path,);
-                    ProcessStartInfo t_psi = new ProcessStartInfo();
-                    t_psi.WorkingDirectory = Path.GetDirectoryName(t_path);
-                    //MessageBox.Show("t_psi.WorkingDirectory: " + t_psi.WorkingDirectory);
-                    t_psi.FileName = Path.GetFileName(t_path);
-                    //MessageBox.Show("t_psi.FileName: " + t_psi.FileName);
-                    Process.Start(t_psi);
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Center_Location:
-                {
-                    this.CenterToScreen();
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Exit:
-                {
-                    this.Close();
-
-                    break;
-                }
-
-            case Win_Message_Types.Win_Copy_Folder:
-                {
-                    DialogResult t_dr = this.folderBrowserDialog1.ShowDialog();
-                    string t_path = Environment.CurrentDirectory;
-                    string t_path2 = this.folderBrowserDialog1.SelectedPath;                    
-                    //MessageBox.Show("t_path: " + t_path);
-                    //MessageBox.Show("t_path2: " + t_path2);
-                    try
+                case Win_Message_Types.Win_Init:
                     {
-                        DirectoryCopy(t_path, t_path2, true);
+                        //
+                        break;
                     }
-                    catch (Exception) { }
 
-                    //string t_path3 = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                    //String t_name = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
-                    //MessageBox.Show("t_path3: " + t_path3);
-                    //MessageBox.Show("t_name: " + t_name);
-                    //CreateShortCut(t_path, t_path3, t_name);
+                case Win_Message_Types.Win_Set_Title:
+                    {
+                        string t_name = (string)args[0];
+                        this.Text = t_name;
 
-                    string t_path3 = Path.Combine(t_path2, "main1.exe");
-                    //MessageBox.Show("t_path3: " + t_path3);
-                    //appShortcutToDesktop(t_path3);
-                    //CreateShortcut();
+                        break;
+                    }
 
-                    break;
-                }
+                case Win_Message_Types.Win_Set_Visible:
+                    {
+                        bool t_b = (bool)args[0];
+                        this.Visible = t_b;
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Set_MinSize:
+                    {
+                        this.WindowState = FormWindowState.Normal;
+                        Size t_s = this.Size;
+                        t_s.Width = (int)args[0];
+                        t_s.Height = (int)args[1];
+                        this.MinimumSize = this.DefaultMaximumSize;
+                        this.ClientSize = t_s;
+                        this.MinimumSize = this.Size;
+
+                        break;
+                    }
+
+
+                case Win_Message_Types.Win_Set_Location:
+                    {
+                        this.WindowState = FormWindowState.Normal;
+                        Point t_p = this.Location;
+                        t_p.X = (int)args[0];
+                        t_p.Y = (int)args[1];
+                        this.Location = t_p;
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Resize_Max:
+                    {
+                        this.WindowState = FormWindowState.Maximized;
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Resize_Min:
+                    {
+                        this.WindowState = FormWindowState.Minimized;
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Resize_Normal:
+                    {
+                        this.WindowState = FormWindowState.Normal;
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Resize_FullScreen:
+                    {
+                        bool t_b = (bool)args[0];
+                        this.p_SetFullScreen(t_b);
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Resize:
+                    {
+                        this.WindowState = FormWindowState.Normal;
+                        Size t_s = this.Size;
+                        t_s.Width = (int)args[0];
+                        t_s.Height = (int)args[1];
+                        this.ClientSize = t_s;
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Open:
+                    {
+                        string t_basePath = Environment.CurrentDirectory;
+                        string t_filePath = (string)args[0];
+                        string t_path = Path.Combine(t_basePath, t_filePath);
+                        //Debug.Log("t_basePath: " + t_basePath);
+                        //Debug.Log("t_filePath: " + t_filePath);
+                        //Debug.Log("t_path: " + t_path);
+
+                        ProcessStartInfo t_psi = new ProcessStartInfo();
+                        t_psi.WorkingDirectory = Path.GetDirectoryName(t_path);
+                        //Debug.Log("t_psi.WorkingDirectory: " + t_psi.WorkingDirectory);
+                        t_psi.FileName = Path.GetFileName(t_path);
+                        //Debug.Log("t_psi.FileName: " + t_psi.FileName);
+
+                        Process.Start(t_psi);
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Center_Location:
+                    {
+                        this.CenterToScreen();
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Copy_Folder:
+                    {
+                        DialogResult t_dr = this.folderBrowserDialog1.ShowDialog();
+                        string t_path = Environment.CurrentDirectory;
+                        //string t_path2 = this.folderBrowserDialog1.SelectedPath;
+                        string t_path2 = Path.Combine(this.folderBrowserDialog1.SelectedPath, this.Text); ;
+                        //MessageBox.Show("t_path: " + t_path);
+                        //MessageBox.Show("t_path2: " + t_path2);
+
+                        try
+                        {
+                            FIO_Util.DirectoryCopy(t_path, t_path2, true, this.Text);
+                        }
+                        catch (Exception)
+                        {
+                        }
+
+                        break;
+                    }
+
+                case Win_Message_Types.Win_Close:
+                    {
+                        this.Close();
+
+                        break;
+                    }
             }
         }
-
-
-        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
-        {
-            // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-            DirectoryInfo[] dirs = dir.GetDirectories();
-
-            if (!dir.Exists)
-            {
-                throw new DirectoryNotFoundException(
-                    "Source directory does not exist or could not be found: "
-                    + sourceDirName);
-            }
-
-            // If the destination directory doesn't exist, create it. 
-            if (!Directory.Exists(destDirName))
-            {
-                Directory.CreateDirectory(destDirName);
-            }
-
-            // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, false);
-            }
-
-            // If copying subdirectories, copy them and their contents to new location. 
-            if (copySubDirs)
-            {
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    string temppath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
-                }
-            }
-        }
-/*
-        private void CreateShortCut(string shortCutPath, string originalPath, string file)
-        {
-            WshShellClass WshShell = new WshShellClass();
-
-
-            IWshRuntimeLibrary.IWshShortcut objShortcut;
-
-            // 바로가기를 저장할 경로를 지정한다.
-            objShortcut = (IWshRuntimeLibrary.IWshShortcut)WshShell.CreateShortcut(shortCutPath + "\\" + file.Substring(0, file.LastIndexOf(".")) + ".lnk");
-
-            // 바로가기에 프로그램의 경로를 지정한다.
-            objShortcut.TargetPath = originalPath + "\\" + file;
-            // 시작 위치를 지정한다.
-
-            objShortcut.WorkingDirectory = originalPath;
-
-            // 바로가기의 description을 지정한다.
-            objShortcut.Description = "어쩌구 바로가기";
-
-            // 바로가기 아이콘을 지정한다.
-            objShortcut.IconLocation = originalPath + "\\" + file;
-
-            // 바로가기를 저장한다.
-            objShortcut.Save();
-        }*/
-/*
-        private static void appShortcutToDesktop(string linkName)
-        {
-            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
-            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + linkName + ".url"))
-            {
-                string app = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                writer.WriteLine("[InternetShortcut]");
-                writer.WriteLine("URL=file:///" + app);
-                writer.WriteLine("IconIndex=0");
-                string icon = app.Replace('\\', '/');
-                writer.WriteLine("IconFile=" + icon);
-                writer.Flush();
-            }
-        }*/
-        /*
-        private void CreateShortcut()
-        {
-            object shDesktop = (object)"Desktop";
-            WshShell shell = new WshShell();
-            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\Notepad.lnk";
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-            shortcut.Description = "New shortcut for a Notepad";
-            shortcut.Hotkey = "Ctrl+Shift+N";
-            shortcut.TargetPath = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\notepad.exe";
-            shortcut.Save();
-        }*/
-
     }
 }
