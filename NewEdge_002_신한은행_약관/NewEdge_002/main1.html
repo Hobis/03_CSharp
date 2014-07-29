@@ -158,11 +158,18 @@ var p_winInit = function() {
 	//p_mainCall('Win_Resize', [1024, 768]);
 	//p_mainCall('Win_Open', ['D:\\_Test\\Open.exe']);
 	//p_mainCall('Win_Center_Location');
-
+/*
 	setTimeout(function() {
 		p_mainCall('Win_Resize_FullScreen', [true]);
-	}, 100);
+	}, 100);*/
 //	}
+
+
+
+
+	jQuery('#ttt').click(function() {
+		p_mainCall('Win_Copy_Folder');
+	});
 };
 
 // - 도큐먼트 시작
@@ -200,7 +207,7 @@ body {
 	position: absolute; left: 0px; top: 0px;
 	width: 100%; height: 100%;
 	overflow: hidden;
-	display: none;
+	/*display: none;*/
 }
 </style>
 </head>
@@ -226,7 +233,7 @@ body {
 	</div>
 
 	<!-- Sub Swf -->
-	<div id="subCont_dv"></div>
+	<div id="subCont_dv"><button id="ttt">xxx</button></div>
 </body>
 
 </html>
