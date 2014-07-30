@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Windows Desktop
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewEdge_002", "NewEdge_002\NewEdge_002.csproj", "{7A422E22-42DD-435A-ABDA-67CCA17C9121}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShinhanLife_001", "ShinhanLife_001\ShinhanLife_001.csproj", "{7A422E22-42DD-435A-ABDA-67CCA17C9121}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

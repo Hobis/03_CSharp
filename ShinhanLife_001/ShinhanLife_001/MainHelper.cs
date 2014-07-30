@@ -117,7 +117,7 @@ namespace NewEdge_002
             WshShell t_ws = new WshShell();
             string t_sca = (string)t_ws.SpecialFolders.Item(ref t_dto) + "\\" + shortchutName + ".lnk";
             IWshShortcut t_wsc = (IWshShortcut)t_ws.CreateShortcut(t_sca);
-            t_wsc.Description = "New shortcut for a Notepad";
+            //t_wsc.Description = shortchutName;
             //t_wsc.Hotkey = "Ctrl+Shift+N";
             t_wsc.TargetPath = filePath;
             t_wsc.WorkingDirectory = Path.GetDirectoryName(filePath);
